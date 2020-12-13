@@ -1,5 +1,5 @@
 // select canvas element
-const canvas = document.getElementById("pong");
+const canvas = document.getElementById("pong"); //(0,0) is the top left corner
 
 // getContext of canvas = methods and properties to draw and do a lot of thing to the canvas
 const ctx = canvas.getContext('2d');
@@ -15,6 +15,9 @@ wall.src = "sounds/wall.mp3";
 comScore.src = "sounds/comScore.mp3";
 userScore.src = "sounds/userScore.mp3";
 
+let paddleHeight = 100;
+let paddleWidth = 10;
+
 // Ball object
 const ball = {
     x : canvas.width/2,
@@ -28,31 +31,31 @@ const ball = {
 
 // User Paddle
 const user = {
-    x : 0, // left side of canvas
-    y : (canvas.height - 100)/2, // -100 the height of paddle
-    width : 10,
-    height : 100,
+    width : paddleWidth,
+    height : paddleHeight,
     score : 0,
-    color : "WHITE"
+    color : "WHITE",
+    x : 0, // left side of canvas
+    y : (canvas.height - paddleHeight)/2 // -100 the height of paddle
 }
 
 // COM Paddle
 const com = {
-    x : canvas.width - 10, // - width of paddle
-    y : (canvas.height - 100)/2, // -100 the height of paddle
-    width : 10,
-    height : 100,
+    width : paddleWidth,
+    height : paddleHeight,
     score : 0,
-    color : "WHITE"
+    color : "WHITE",
+    x : canvas.width - paddleWidth, // - width of paddle
+    y : (canvas.height - paddleHeight)/2 // -100 the height of paddle
 }
 
 // NET
 const net = {
-    x : (canvas.width - 2)/2,
-    y : 0,
     height : 10,
     width : 2,
-    color : "WHITE"
+    color : "WHITE",
+    x : (canvas.width - 2)/2,
+    y : 0
 }
 
 // draw a rectangle, will be used to draw paddles
@@ -70,13 +73,19 @@ function drawArc(x, y, r, color){
     ctx.fill();
 }
 
-// listening to the mouse
-canvas.addEventListener("mousemove", getMousePos);
+// listening to the keyboard
+document.addEventListener("keydown", onKeyDown);
 
-function getMousePos(evt){
-    let rect = canvas.getBoundingClientRect();
-    
-    user.y = evt.clientY - rect.top - user.height/2;
+function onKeyDown(evt){
+    if('65' == evt.keyCode && user.y > 0) //A key
+    {
+	user.y = user.y - 10;
+    }
+
+    if('81' == evt.keyCode && user.y < (canvas.height - user.height)) //Q key
+    {
+	user.y = user.y + 10;
+    }
 }
 
 // when COM or USER scores, we reset the ball
@@ -206,4 +215,3 @@ let framePerSecond = 50;
 
 //call the game function 50 times every 1 Sec
 let loop = setInterval(game,1000/framePerSecond);
-
