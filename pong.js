@@ -1,3 +1,5 @@
+//Test
+
 // select canvas element
 const canvas = document.getElementById("pong"); //(0,0) is the top left corner
 
